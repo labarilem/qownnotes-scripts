@@ -11,13 +11,16 @@ QtObject {
         running: true
                 
         onTriggered: {
-            var notesFolderPath = script.toNativeDirSeparators(script.currentNoteFolderPath());
-            var notesDrivePath = notesFolderPath.substr(0, 2);
-            var changeDirCmd = "cd /d " + notesDrivePath + " && " + "cd " + notesFolderPath;
-            var gitPushCmd = "git push"; 
-            var cmd = changeDirCmd + " && " + gitPushCmd;
+            var notesFolderPath = script.currentNoteFolderPath();
             script.log("[git-push-timer] pushing...");
-            script.startDetachedProcess("cmd.exe", ["/C", cmd]);
+            script.startDetachedProcess(
+                "git",
+                ["push"],
+                undefined,
+                undefined,
+                undefined,
+                notesFolderPath,
+            );
             script.log("[git-push-timer] pushed");
         }
     }
