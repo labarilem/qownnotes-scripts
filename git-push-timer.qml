@@ -13,7 +13,7 @@ QtObject {
         onTriggered: {
             var notesFolderPath = script.currentNoteFolderPath();
             script.log("[git-push-timer] pushing...");
-            script.startDetachedProcess(
+            var success = script.startDetachedProcess(
                 "git",
                 ["push"],
                 undefined,
@@ -21,7 +21,11 @@ QtObject {
                 undefined,
                 notesFolderPath,
             );
-            script.log("[git-push-timer] pushed");
+            if (success) {
+                script.log("[git-push-timer] pushed");
+            } else {
+                script.log("[git-push-timer] couldn't push");
+            }
         }
     }
 }

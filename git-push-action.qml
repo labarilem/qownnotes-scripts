@@ -30,6 +30,10 @@ QtObject {
             undefined,
             notesFolderPath,
         );
-        script.log("[git-push-action] pushed");
+        if (success) {
+            script.log("[git-push-action] pushed");
+        } else {
+            script.log("[git-push-action] couldn't push");
+        }
     }
 }
