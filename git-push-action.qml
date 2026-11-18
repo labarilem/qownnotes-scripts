@@ -17,18 +17,23 @@ QtObject {
      * @param identifier string the identifier defined in registerCustomAction
      */
     function customActionInvoked(identifier) {
-        switch (identifier) {
-            // Perform a git push
-            case "gitPush":
-                var notesFolderPath = script.toNativeDirSeparators(script.currentNoteFolderPath());
-                var notesDrivePath = notesFolderPath.substr(0, 2);
-                var changeDirCmd = "cd /d " + notesDrivePath + " && " + "cd " + notesFolderPath;
-                var gitPushCmd = "git push"; 
-                var cmd = changeDirCmd + " && " + gitPushCmd;
-                script.log("[git-push-action] pushing...");
-                script.startDetachedProcess("cmd.exe", ["/C", cmd]);
-                script.log("[git-push-action] pushed");
-                break;
+        if (identifier !== "gitPush") return;
+
+        // Perform a git push
+        var notesFolderPath = script.currentNoteFolderPath();
+        script.log("[git-push-action] pushing...");
+        var success = script.startDetachedProcess(
+            "git",
+            ["push"],
+            undefined,
+            undefined,
+            undefined,
+            notesFolderPath,
+        );
+        if (success) {
+            script.log("[git-push-action] pushed");
+        } else {
+            script.log("[git-push-action] couldn't push");
         }
     }
 }
